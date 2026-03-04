@@ -1,0 +1,82 @@
+# Copyright (C) 2026 NExT-Season with WordPress Telex
+# This file is distributed under the GPLv2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: NExT Date Expiry Text Block 0.2.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/next-date-expiry-block\n"
+"PO-Revision-Date: 2026-03-04 00:00+0000\n"
+"Last-Translator: NExT-Season <info@next-season.net>\n"
+"Language-Team: Japanese\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: next-date-expiry-block\n"
+
+#. Plugin Name of the plugin
+#: telex-date-expiry-block.php
+msgid "NExT Date Expiry Text Block"
+msgstr "NExT 期限切れテキストブロック"
+
+#. Description of the plugin
+#: telex-date-expiry-block.php
+msgid "A block that displays custom text when a specified custom field date has passed. Supports full paragraph-level text styling."
+msgstr "指定したカスタムフィールドの日付を過ぎると任意のテキストを表示するブロックです。段落ブロックと同等のテキスト装飾に対応しています。"
+
+#. Author of the plugin
+#: telex-date-expiry-block.php
+msgid "NExT-Season with WordPress Telex"
+msgstr "NExT-Season with WordPress Telex"
+
+#. Author URI of the plugin
+#: telex-date-expiry-block.php
+msgid "https://next-season.net/"
+msgstr "https://next-season.net/"
+
+#: build/index.js:1
+#: src/edit.js:66
+msgid "Expiry Settings"
+msgstr "期限設定"
+
+#: build/index.js:1
+#: src/edit.js:72
+msgid "Custom Field Name"
+msgstr "カスタムフィールド名"
+
+#: build/index.js:1
+#: src/edit.js:76
+msgid "Enter the meta key name that stores the expiry date."
+msgstr "有効期限の日付が保存されているメタキー名を入力してください。"
+
+#: build/index.js:1
+#: src/edit.js:86
+msgid "Date Format"
+msgstr "日付フォーマット"
+
+#: build/index.js:1
+#: src/edit.js:90
+msgid "PHP date format of the custom field value. Default: Y-m-d"
+msgstr "カスタムフィールドに保存されている PHP 日付フォーマット。デフォルト: Y-m-d"
+
+#: build/index.js:1
+#: src/edit.js:105
+msgid "Please set a custom field name in the block settings."
+msgstr "ブロック設定でカスタムフィールド名を設定してください。"
+
+#: build/index.js:1
+#: src/edit.js:118
+msgid "Enter text to display when the date has expired…"
+msgstr "期限切れ後に表示するテキストを入力…"
+
+#: build/block.json
+#: src/block.json
+msgctxt "block title"
+msgid "Date Expiry Text Block"
+msgstr "期限切れテキストブロック"
+
+#: build/block.json
+#: src/block.json
+msgctxt "block description"
+msgid "Displays custom text when a specified custom field date has passed."
+msgstr "指定したカスタムフィールドの日付を過ぎると任意のテキストを表示します。"

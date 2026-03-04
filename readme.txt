@@ -4,7 +4,7 @@
 Contributors:      WordPress Telex
 Tags:              block, custom-field, date, expiry, conditional
 Tested up to:      6.8
-Stable tag:        0.2.0
+Stable tag:        0.3.0
 License:           GPLv2 or later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 A block that displays custom text when a specified custom field date has passed.
@@ -41,6 +41,10 @@ If the custom field is not found on the current post, the block will not render 
 Yes, as long as the custom field stores a date string, you can specify that field name in the block settings.
 
 == Changelog ==
+
+= 0.3.0 =
+* Added Japanese (ja) translation
+* Added i18n support with load_plugin_textdomain()
 
 = 0.2.0 =
 * Changed prefix from telex- to next-

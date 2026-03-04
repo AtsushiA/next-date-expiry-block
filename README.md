@@ -42,6 +42,10 @@ npm run release    # Production build + create plugin zip
 
 ## Changelog
 
+### 0.3.0
+- Added Japanese (ja) translation
+- Added i18n support with `load_plugin_textdomain()`
+
 ### 0.2.0
 - Changed prefix from `telex-` to `next-`
 
@@ -89,6 +93,10 @@ npm run release    # 本番ビルド + プラグインzip生成
 ```
 
 ## 変更履歴
+
+### 0.3.0
+- 日本語（ja）翻訳を追加
+- `load_plugin_textdomain()` による多言語化対応を追加
 
 ### 0.2.0
 - プレフィックスを `telex-` から `next-` に変更

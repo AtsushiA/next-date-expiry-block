@@ -1,7 +1,7 @@
 
 {
 	"name": "next-date-expiry-block",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "A block that displays custom text when a specified custom field date has passed.",
 	"author": "WordPress Telex",
 	"license": "GPL-2.0-or-later",
