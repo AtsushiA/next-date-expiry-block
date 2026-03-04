@@ -1,0 +1,497 @@
+<artefact xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="artefact.xsd" name="Date Expiry Text Block" slug="telex-date-expiry-block" type="code-package" schemaVersion="2">
+  <file path="readme.txt">
+    <description>This file contains the readme information for the block.</description>
+    <content><![CDATA[
+=== Date Expiry Text Block ===
+
+Contributors:      WordPress Telex
+Tags:              block, custom-field, date, expiry, conditional
+Tested up to:      6.8
+Stable tag:        0.1.0
+License:           GPLv2 or later
+License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+A block that displays custom text when a specified custom field date has passed.
+
+== Description ==
+
+Date Expiry Text Block allows you to conditionally display text based on whether a date stored in a custom field has expired. This is useful for showing expiration notices, deadline alerts, sale-ended messages, and other time-sensitive content.
+
+**Features:**
+
+* Specify any custom field name that contains a date value.
+* Set the date format used in the custom field (default: Y-m-d).
+* Write custom text to display when the date has passed.
+* Full paragraph-level text styling: text color, background color, font size, text alignment, and typography controls.
+* On the front end, the block only renders when the custom field date is in the past — otherwise nothing is shown.
+
+== Installation ==
+
+1. Upload the plugin files to the `/wp-content/plugins/telex-date-expiry-block` directory, or install the plugin through the WordPress plugins screen directly.
+1. Activate the plugin through the 'Plugins' screen in WordPress
+
+== Frequently Asked Questions ==
+
+= What date formats are supported? =
+
+By default the block expects dates in `Y-m-d` format (e.g., 2026-03-04). You can change the date format in the block settings to match the format stored in your custom field.
+
+= What happens if the custom field doesn't exist? =
+
+If the custom field is not found on the current post, the block will not render anything on the front end.
+
+= Can I use this with ACF or other custom field plugins? =
+
+Yes, as long as the custom field stores a date string, you can specify that field name in the block settings.
+
+== Changelog ==
+
+= 0.1.0 =
+* Initial release
+]]></content></file>
+  <file path="telex-date-expiry-block.php">
+    <description>Main plugin file that registers the block.</description>
+    <content><![CDATA[<?php
+/**
+ * Plugin Name:       Date Expiry Text Block
+ * Description:       A block that displays custom text when a specified custom field date has passed. Supports full paragraph-level text styling.
+ * Version:           0.1.0
+ * Requires at least: 6.1
+ * Requires PHP:      7.0
+ * Author:            WordPress Telex
+ * License:           GPLv2 or later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain:       telex-date-expiry-block
+ *
+ * @package TelexDateExpiryBlock
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
+/**
+ * Registers the block using the metadata loaded from the `block.json` file.
+ */
+if ( ! function_exists( 'telex_date_expiry_block_telex_date_expiry_block_block_init' ) ) {
+	function telex_date_expiry_block_telex_date_expiry_block_block_init() {
+		register_block_type( __DIR__ . '/build/' );
+	}
+}
+add_action( 'init', 'telex_date_expiry_block_telex_date_expiry_block_block_init' );
+]]></content>
+  </file>
+  <file path="src/block.json">
+    <description>Block metadata including attributes for custom field name, date format, display text, and paragraph-level supports.</description>
+    <content><![CDATA[
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "telex/block-telex-date-expiry-block",
+	"version": "0.1.0",
+	"title": "Date Expiry Text Block",
+	"category": "text",
+	"icon": "calendar-alt",
+	"description": "Displays custom text when a specified custom field date has passed.",
+	"example": {
+		"attributes": {
+			"customFieldName": "expiry_date",
+			"dateFormat": "Y-m-d",
+			"content": "This content has expired."
+		}
+	},
+	"attributes": {
+		"customFieldName": {
+			"type": "string",
+			"default": ""
+		},
+		"dateFormat": {
+			"type": "string",
+			"default": "Y-m-d"
+		},
+		"content": {
+			"type": "string",
+			"default": ""
+		},
+		"textAlign": {
+			"type": "string"
+		}
+	},
+	"supports": {
+		"html": false,
+		"color": {
+			"gradients": true,
+			"text": true,
+			"background": true
+		},
+		"typography": {
+			"fontSize": true,
+			"lineHeight": true,
+			"__experimentalFontFamily": true,
+			"__experimentalFontWeight": true,
+			"__experimentalFontStyle": true,
+			"__experimentalTextTransform": true,
+			"__experimentalTextDecoration": true,
+			"__experimentalLetterSpacing": true
+		},
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"__experimentalBorder": {
+			"radius": true,
+			"width": true,
+			"color": true,
+			"style": true
+		}
+	},
+	"textdomain": "telex-date-expiry-block",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"viewScript": "file:./view.js",
+	"render": "file:./render.php"
+}
+]]></content>
+  </file>
+  <file path="src/index.js">
+    <description>Registers the block type with edit component only (dynamic block).</description>
+    <content><![CDATA[
+/**
+ * Registers a new block provided a unique name and an object defining its behavior.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
+ */
+import { registerBlockType } from '@wordpress/blocks';
+
+/**
+ * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
+ * All files containing `style` keyword are bundled together. The code used
+ * gets applied both to the front of your site and to the editor.
+ *
+ * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
+ */
+import './style.scss';
+
+/**
+ * Internal dependencies
+ */
+import Edit from './edit';
+import metadata from './block.json';
+
+/**
+ * Every block starts by registering a new block type definition.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
+ */
+registerBlockType( metadata.name, {
+	/**
+	 * @see ./edit.js
+	 */
+	edit: Edit,
+} );
+]]></content>
+  </file>
+  <file path="src/edit.js">
+    <description>Edit component with RichText for content, alignment toolbar, and inspector controls for custom field name and date format.</description>
+    <content><![CDATA[
+/**
+ * Retrieves the translation of text.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
+ */
+import { __ } from '@wordpress/i18n';
+
+/**
+ * React hook that is used to mark the block wrapper element.
+ * It provides all the necessary props like the class name.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
+ */
+import {
+	useBlockProps,
+	RichText,
+	BlockControls,
+	AlignmentToolbar,
+	InspectorControls,
+} from '@wordpress/block-editor';
+
+import {
+	PanelBody,
+	TextControl,
+	Notice,
+} from '@wordpress/components';
+
+/**
+ * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
+ * Those files can contain any CSS code that gets applied to the editor.
+ *
+ * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
+ */
+import './editor.scss';
+
+/**
+ * The edit function describes the structure of your block in the context of the
+ * editor. This represents what the editor will render when the block is used.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
+ *
+ * @return {Element} Element to render.
+ */
+export default function Edit( { attributes, setAttributes } ) {
+	const { customFieldName, dateFormat, content, textAlign } = attributes;
+
+	const blockProps = useBlockProps( {
+		style: {
+			textAlign: textAlign || undefined,
+		},
+	} );
+
+	return (
+		<>
+			<BlockControls>
+				<AlignmentToolbar
+					value={ textAlign }
+					onChange={ ( newAlign ) =>
+						setAttributes( { textAlign: newAlign } )
+					}
+				/>
+			</BlockControls>
+			<InspectorControls>
+				<PanelBody
+					title={ __(
+						'Expiry Settings',
+						'telex-date-expiry-block'
+					) }
+				>
+					<TextControl
+						label={ __(
+							'Custom Field Name',
+							'telex-date-expiry-block'
+						) }
+						help={ __(
+							'Enter the meta key name that stores the expiry date.',
+							'telex-date-expiry-block'
+						) }
+						value={ customFieldName }
+						onChange={ ( value ) =>
+							setAttributes( { customFieldName: value } )
+						}
+					/>
+					<TextControl
+						label={ __(
+							'Date Format',
+							'telex-date-expiry-block'
+						) }
+						help={ __(
+							'PHP date format of the custom field value. Default: Y-m-d',
+							'telex-date-expiry-block'
+						) }
+						value={ dateFormat }
+						onChange={ ( value ) =>
+							setAttributes( { dateFormat: value } )
+						}
+					/>
+				</PanelBody>
+			</InspectorControls>
+			<div { ...blockProps }>
+				{ ! customFieldName && (
+					<div className="telex-date-expiry-block-notice">
+						<Notice status="warning" isDismissible={ false }>
+							{ __(
+								'Please set a custom field name in the block settings.',
+								'telex-date-expiry-block'
+							) }
+						</Notice>
+					</div>
+				) }
+				<RichText
+					tagName="p"
+					value={ content }
+					onChange={ ( value ) =>
+						setAttributes( { content: value } )
+					}
+					placeholder={ __(
+						'Enter text to display when the date has expired…',
+						'telex-date-expiry-block'
+					) }
+					allowedFormats={ [
+						'core/bold',
+						'core/italic',
+						'core/link',
+						'core/strikethrough',
+						'core/underline',
+						'core/text-color',
+						'core/subscript',
+						'core/superscript',
+						'core/code',
+					] }
+				/>
+			</div>
+		</>
+	);
+}
+]]></content>
+  </file>
+  <file path="src/save.js">
+    <description>Save returns null because this is a dynamic block rendered via render.php.</description>
+    <content><![CDATA[
+]]></content>
+  </file>
+  <file path="src/style.scss">
+    <description>Shared styles for both editor and front end.</description>
+    <content><![CDATA[
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ */
+
+.wp-block-telex-block-telex-date-expiry-block {
+	p {
+		margin: 0;
+	}
+}
+]]></content>
+  </file>
+  <file path="src/editor.scss">
+    <description>Editor-only styles including the notice styling.</description>
+    <content><![CDATA[
+/**
+ * The following styles get applied inside the editor only.
+ */
+
+.wp-block-telex-block-telex-date-expiry-block {
+	.telex-date-expiry-block-notice {
+		margin-bottom: 8px;
+
+		.components-notice {
+			margin: 0;
+		}
+	}
+}
+]]></content>
+  </file>
+  <file path="src/view.js">
+    <description>Front-end view script — no additional JS needed since rendering is handled server-side.</description>
+    <content><![CDATA[
+/**
+ * Front-end view script for Date Expiry Text Block.
+ *
+ * The block rendering is handled entirely server-side via render.php.
+ * No additional JavaScript is needed on the front end.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-metadata/#view-script
+ */
+]]></content>
+  </file>
+  <file path="src/render.php">
+    <description>Server-side render callback. Reads the custom field from the current post, compares the date, and conditionally outputs the text.</description>
+    <content><![CDATA[<?php
+/**
+ * Server-side rendering for the Date Expiry Text Block.
+ *
+ * @see https://github.com/WordPress/gutenberg/blob/trunk/docs/reference-guides/block-api/block-metadata.md#render
+ *
+ * @var array    $attributes Block attributes.
+ * @var string   $content    Block default content.
+ * @var WP_Block $block      Block instance.
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+$custom_field_name = isset( $attributes['customFieldName'] ) ? sanitize_text_field( $attributes['customFieldName'] ) : '';
+$date_format       = isset( $attributes['dateFormat'] ) ? sanitize_text_field( $attributes['dateFormat'] ) : 'Y-m-d';
+$text_content      = isset( $attributes['content'] ) ? $attributes['content'] : '';
+$text_align        = isset( $attributes['textAlign'] ) ? $attributes['textAlign'] : '';
+
+// If no custom field name is set, render nothing.
+if ( empty( $custom_field_name ) ) {
+	return;
+}
+
+// If no content is set, render nothing.
+if ( empty( $text_content ) ) {
+	return;
+}
+
+// Get the current post ID.
+$post_id = get_the_ID();
+
+if ( ! $post_id ) {
+	return;
+}
+
+// Retrieve the custom field value.
+$field_value = get_post_meta( $post_id, $custom_field_name, true );
+
+if ( empty( $field_value ) ) {
+	return;
+}
+
+// Parse the date from the custom field.
+$expiry_date = DateTime::createFromFormat( $date_format, $field_value );
+
+if ( ! $expiry_date ) {
+	// Try standard strtotime as a fallback.
+	$timestamp = strtotime( $field_value );
+	if ( false === $timestamp ) {
+		return;
+	}
+	$expiry_date = new DateTime();
+	$expiry_date->setTimestamp( $timestamp );
+}
+
+// Reset time to end of day for fair comparison.
+$expiry_date->setTime( 23, 59, 59 );
+
+$now = new DateTime( 'now', wp_timezone() );
+
+// Only display if the expiry date has passed.
+if ( $expiry_date >= $now ) {
+	return;
+}
+
+// Build inline styles for text alignment.
+$inline_style = '';
+if ( ! empty( $text_align ) ) {
+	$inline_style = 'text-align:' . esc_attr( $text_align ) . ';';
+}
+
+$wrapper_attributes = get_block_wrapper_attributes(
+	array(
+		'style' => $inline_style,
+	)
+);
+?>
+<div <?php echo $wrapper_attributes; ?>>
+	<p><?php echo wp_kses_post( $text_content ); ?></p>
+</div>
+]]></content>
+  </file>
+  <file path="package.json">
+    <description>Package configuration for the block plugin.</description>
+    <content><![CDATA[
+{
+	"name": "telex-date-expiry-block",
+	"version": "0.1.0",
+	"description": "A block that displays custom text when a specified custom field date has passed.",
+	"author": "WordPress Telex",
+	"license": "GPL-2.0-or-later",
+	"main": "build/index.js",
+	"scripts": {
+		"build": "wp-scripts build",
+		"format": "wp-scripts format",
+		"lint:css": "wp-scripts lint-style",
+		"lint:js": "wp-scripts lint-js",
+		"packages-update": "wp-scripts packages-update",
+		"plugin-zip": "wp-scripts plugin-zip",
+		"start": "wp-scripts start"
+	},
+	"devDependencies": {
+		"@wordpress/scripts": "^30.15.0"
+	}
+}
+]]></content>
+  </file>
+</artefact>
