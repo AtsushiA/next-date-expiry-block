@@ -42,6 +42,11 @@ npm run release    # Production build + create plugin zip
 
 ## Changelog
 
+### 1.0.0
+- Security: sanitize `content` attribute on input with `wp_kses_post()`
+- Security: removed empty `view.js` and unused `viewScript` registration
+- Security: added PHPCS ignore annotation to `get_block_wrapper_attributes()` output
+
 ### 0.3.1
 - Fixed plugin zip installation by renaming main PHP file to `next-date-expiry-block.php`
 
@@ -96,6 +101,11 @@ npm run release    # 本番ビルド + プラグインzip生成
 ```
 
 ## 変更履歴
+
+### 1.0.0
+- セキュリティ: `content` 属性の入力時に `wp_kses_post()` でサニタイズ
+- セキュリティ: 空の `view.js` と未使用の `viewScript` 登録を削除
+- セキュリティ: `get_block_wrapper_attributes()` 出力に PHPCS ignore アノテーションを追加
 
 ### 0.3.1
 - メインPHPファイルを `next-date-expiry-block.php` にリネームし、zipインストール時のエラーを修正

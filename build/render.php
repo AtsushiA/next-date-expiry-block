@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $custom_field_name = isset( $attributes['customFieldName'] ) ? sanitize_text_field( $attributes['customFieldName'] ) : '';
 $date_format       = isset( $attributes['dateFormat'] ) ? sanitize_text_field( $attributes['dateFormat'] ) : 'Y-m-d';
-$text_content      = isset( $attributes['content'] ) ? $attributes['content'] : '';
+$text_content      = isset( $attributes['content'] ) ? wp_kses_post( $attributes['content'] ) : '';
 $text_align        = isset( $attributes['textAlign'] ) ? $attributes['textAlign'] : '';
 
 // If no custom field name is set, render nothing.
@@ -77,6 +77,6 @@ $wrapper_attributes = get_block_wrapper_attributes(
 	)
 );
 ?>
-<div <?php echo $wrapper_attributes; ?>>
+<div <?php echo $wrapper_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Sanitized by get_block_wrapper_attributes(). ?>>
 	<p><?php echo wp_kses_post( $text_content ); ?></p>
 </div>

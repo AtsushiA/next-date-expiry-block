@@ -4,7 +4,7 @@
 Contributors:      WordPress Telex
 Tags:              block, custom-field, date, expiry, conditional
 Tested up to:      6.8
-Stable tag:        0.3.1
+Stable tag:        1.0.0
 License:           GPLv2 or later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 A block that displays custom text when a specified custom field date has passed.
@@ -41,6 +41,11 @@ If the custom field is not found on the current post, the block will not render 
 Yes, as long as the custom field stores a date string, you can specify that field name in the block settings.
 
 == Changelog ==
+
+= 1.0.0 =
+* Security: sanitize content attribute on input with wp_kses_post()
+* Security: removed empty view.js and unused viewScript registration
+* Security: added PHPCS ignore annotation to get_block_wrapper_attributes() output
 
 = 0.3.1 =
 * Fixed plugin zip installation by renaming main PHP file to next-date-expiry-block.php
