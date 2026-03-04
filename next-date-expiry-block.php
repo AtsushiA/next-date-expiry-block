@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       NExT Date Expiry Text Block
  * Description:       A block that displays custom text when a specified custom field date has passed. Supports full paragraph-level text styling.
- * Version:           0.3.0
+ * Version:           0.3.1
  * Requires at least: 6.1
  * Requires PHP:      7.0
  * Author:            NExT-Season with WordPress Telex

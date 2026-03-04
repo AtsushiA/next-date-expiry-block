@@ -42,6 +42,9 @@ npm run release    # Production build + create plugin zip
 
 ## Changelog
 
+### 0.3.1
+- Fixed plugin zip installation by renaming main PHP file to `next-date-expiry-block.php`
+
 ### 0.3.0
 - Added Japanese (ja) translation
 - Added i18n support with `load_plugin_textdomain()`
@@ -93,6 +96,9 @@ npm run release    # 本番ビルド + プラグインzip生成
 ```
 
 ## 変更履歴
+
+### 0.3.1
+- メインPHPファイルを `next-date-expiry-block.php` にリネームし、zipインストール時のエラーを修正
 
 ### 0.3.0
 - 日本語（ja）翻訳を追加
