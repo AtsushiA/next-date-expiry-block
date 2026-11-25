@@ -22,6 +22,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Loads the plugin text domain for translations.
  */
 if ( ! function_exists( 'next_date_expiry_block_load_textdomain' ) ) {
+	/**
+	 * Loads the plugin text domain for translations.
+	 */
 	function next_date_expiry_block_load_textdomain() {
 		load_plugin_textdomain(
 			'next-date-expiry-block',
@@ -36,6 +39,9 @@ add_action( 'init', 'next_date_expiry_block_load_textdomain' );
  * Registers the block using the metadata loaded from the `block.json` file.
  */
 if ( ! function_exists( 'next_date_expiry_block_block_init' ) ) {
+	/**
+	 * Registers the block using the metadata loaded from the `block.json` file.
+	 */
 	function next_date_expiry_block_block_init() {
 		register_block_type( __DIR__ . '/build/' );
 	}

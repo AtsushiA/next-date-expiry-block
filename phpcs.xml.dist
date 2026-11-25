@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<ruleset name="NExT Date Expiry Text Block">
+    <description>Custom ruleset for NExT Date Expiry Text Block</description>
+
+    <!-- PHP ファイルのみを対象にする -->
+    <arg name="extensions" value="php"/>
+
+    <!-- 対象ファイル -->
+    <file>./next-date-expiry-block.php</file>
+    <file>./src/</file>
+
+    <!-- 除外 -->
+    <exclude-pattern>./vendor/*</exclude-pattern>
+    <exclude-pattern>./node_modules/*</exclude-pattern>
+    <exclude-pattern>./tests/*</exclude-pattern>
+    <exclude-pattern>./build/*</exclude-pattern>
+
+    <!-- WordPress Coding Standards -->
+    <rule ref="WordPress"/>
+
+    <!-- Gutenberg block render.php はレンダーコールバック内ローカル変数を誤検知するため除外 -->
+    <rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+        <exclude-pattern>./src/render.php</exclude-pattern>
+    </rule>
+    <rule ref="WordPress.WP.GlobalVariablesOverride">
+        <exclude-pattern>./src/render.php</exclude-pattern>
+    </rule>
+
+    <!-- PHP互換性チェック -->
+    <rule ref="PHPCompatibilityWP"/>
+
+    <!-- PHP バージョン (Requires PHP: 7.0) -->
+    <config name="testVersion" value="7.0-"/>
+
+    <!-- テキストドメイン -->
+    <config name="text_domain" value="next-date-expiry-block"/>
+
+    <!-- プレフィックス -->
+    <config name="prefixes" value="next_date_expiry_block"/>
+    <config name="minimum_wp_version" value="6.1"/>
+</ruleset>
